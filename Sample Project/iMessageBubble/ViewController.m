@@ -177,7 +177,12 @@
     
         sendMessage = [[iMessage alloc] initIMessageWithName:@"Prateek Grover" message:self.chatTextView.text time:@"23:14" type:@"self"];
     
-        [self updateTableView:sendMessage];
+        if ([chatCellSettings getUseSendingBubbleEffect]) {
+            [self updateTableViewForSender:sendMessage];
+        }
+        else {
+            [self updateTableView:sendMessage];
+        }
     }
 }
 
@@ -215,7 +220,33 @@
         [self.chatTable scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:UITableViewRowAnimationLeft];
     }
 }
-
+- (void)updateTableViewForSender:(iMessage *)msg
+{
+    NSAttributedString *userMessage = [chatCellSettings replaceEmoticonTextToImageWithString:self.chatTextView.text withAttributes:[chatCellSettings getSenderAttributes]];
+    CGFloat height = [userMessage boundingRectWithSize:CGSizeMake([chatCellSettings getSenderChatMessageLabelWidth], CGFLOAT_MAX)
+                                               options:NSStringDrawingUsesLineFragmentOrigin
+                                               context:nil].size.height + 48.0f + 14.0f;
+    [self.handler textViewDidChange:self.chatTextView heightOfMessage:height bubbleEffect:^{
+        
+        [self.chatTable beginUpdates];
+        
+        NSIndexPath *row1 = [NSIndexPath indexPathForRow:currentMessages.count inSection:0];
+        
+        [currentMessages insertObject:msg atIndex:currentMessages.count];
+        
+        [self.chatTable insertRowsAtIndexPaths:[NSArray arrayWithObjects:row1, nil] withRowAnimation:UITableViewRowAnimationNone];
+        
+        [self.chatTable endUpdates];
+        
+        //Always scroll the chat table when the user sends the message
+        if([self.chatTable numberOfRowsInSection:0]!=0)
+        {
+            NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.chatTable numberOfRowsInSection:0]-1 inSection:0];
+            [self.chatTable scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:UITableViewRowAnimationLeft];
+        }
+        
+    }];
+}
 
 
 #pragma mark - UITableViewDatasource methods
@@ -342,4 +373,32 @@
     
     return size.height;
 }
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([chatCellSettings getUseSendingBubbleEffect]) {
+        iMessage *message = [currentMessages objectAtIndex:indexPath.row];
+        if([message.messageType isEqualToString:@"self"]) {
+            if ([cell isKindOfClass:NSClassFromString(@"ChatTableViewCell")]) {
+                ChatTableViewCell *aCell = (ChatTableViewCell *)cell;
+                
+                aCell.chatMessageLabel.alpha = 0.0f;
+                
+                [UIView animateWithDuration:0.65f animations:^{
+                    aCell.chatMessageLabel.alpha = 1.0f;
+                }];
+            }
+            else {
+                ChatTableViewCellXIB *aCell = (ChatTableViewCellXIB *)cell;
+                
+                aCell.chatMessageLabel.alpha = 0.0f;
+                
+                [UIView animateWithDuration:0.65f animations:^{
+                    aCell.chatMessageLabel.alpha = 1.0f;
+                }];
+            }
+        }
+    }
+}
+
 @end

@@ -21,5 +21,7 @@
             andMaximumNumberOfLine:(NSInteger)maximumNumberOfLines;
 
 - (void)resizeTextViewWithAnimation:(BOOL)animated;
--(void)textViewDidChange:(UITextView *)textView;
+- (void)textViewDidChange:(UITextView *)textView;
+- (void)textViewDidChange:(UITextView *)textView heightOfMessage:(CGFloat)height bubbleEffect:(void (^)(void))completeHandler;
+
 @end

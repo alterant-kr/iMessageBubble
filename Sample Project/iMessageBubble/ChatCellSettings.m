@@ -99,6 +99,8 @@ CGFloat receiverChatMessageLabelWidth;
 NSDictionary *senderAttributes;
 NSDictionary *receiverAttributes;
 
+BOOL useSendingBubbleEffect;
+
 //Singleton instance
 static ChatCellSettings *instance = nil;
 
@@ -149,6 +151,8 @@ static ChatCellSettings *instance = nil;
         receiverAttributes = @{NSForegroundColorAttributeName: receiverBubbleMessageTextColor,
                              NSFontAttributeName: receiverBubbleMessageFontWithSize,
                              NSParagraphStyleAttributeName : paragraphStyle};
+        
+        useSendingBubbleEffect = YES;
     });
     
     return instance;
@@ -349,6 +353,10 @@ static ChatCellSettings *instance = nil;
 - (void)setReceiverAttributes:(NSDictionary *)attributes
 {
     receiverAttributes = attributes;
+}
+- (BOOL)getUseSendingBubbleEffect
+{
+    return useSendingBubbleEffect;
 }
 
 #pragma mark - Read Emoticon Set

@@ -59,6 +59,7 @@
 - (void)setSenderAttributes:(NSDictionary *)attributes;
 - (NSDictionary *)getReceiverAttributes;
 - (void)setReceiverAttributes:(NSDictionary *)attributes;
+- (BOOL)getUseSendingBubbleEffect;
 
 #pragma mark - Read Emoticon Set
 /*!
