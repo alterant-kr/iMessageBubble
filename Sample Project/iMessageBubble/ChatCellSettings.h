@@ -52,5 +52,7 @@
  */
 - (BOOL)getSenderUserImage;
 - (void)senderUserImageRequired:(BOOL)isRequiredOrNot;
+- (CGFloat)getMessageLabelWidth;
+- (void)setMessageLabelWidth:(CGFloat)width;
 
 @end

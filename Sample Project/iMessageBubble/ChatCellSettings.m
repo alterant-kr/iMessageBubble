@@ -93,6 +93,8 @@ UIFont *receiverBubbleNameFontWithSize;
 UIFont *receiverBubbleMessageFontWithSize;
 UIFont *receiverBubbleTimeFontWithSize;
 
+CGFloat messageLabelWidth;
+
 //Singleton instance
 static ChatCellSettings *instance = nil;
 
@@ -132,6 +134,8 @@ static ChatCellSettings *instance = nil;
         receiverBubbleTail = YES;
         
         senderUserImage = YES;
+        
+        messageLabelWidth = 190.0;
     });
     
     return instance;
@@ -297,6 +301,7 @@ static ChatCellSettings *instance = nil;
     return receiverBubbleTail;
 }
 
+#pragma mark - More customized method
 /*!
  * More customizes by neoroman
  */
@@ -308,6 +313,13 @@ static ChatCellSettings *instance = nil;
 {
     senderUserImage = isRequiredOrNot;
 }
-
+- (CGFloat)getMessageLabelWidth
+{
+    return messageLabelWidth;
+}
+- (void)setMessageLabelWidth:(CGFloat)width
+{
+    messageLabelWidth = width;
+}
 
 @end
