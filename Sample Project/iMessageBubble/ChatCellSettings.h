@@ -47,12 +47,47 @@
 -(BOOL) getSenderBubbleTail;
 -(BOOL) getReceiverBubbleTail;
 
+#pragma mark - More customized method
 /*!
  * More customizes by neoroman
  */
-- (BOOL)getSenderUserImage;
-- (void)senderUserImageRequired:(BOOL)isRequiredOrNot;
-- (CGFloat)getMessageLabelWidth;
-- (void)setMessageLabelWidth:(CGFloat)width;
+- (CGFloat)getSenderChatMessageLabelWidth;
+- (void)setSenderChatMessageLabelWidth:(CGFloat)width;
+- (CGFloat)getReceiverChatMessageLabelWidth;
+- (void)setReceiverChatMessageLabelWidth:(CGFloat)width;
+- (NSDictionary *)getSenderAttributes;
+- (void)setSenderAttributes:(NSDictionary *)attributes;
+- (NSDictionary *)getReceiverAttributes;
+- (void)setReceiverAttributes:(NSDictionary *)attributes;
+
+#pragma mark - Read Emoticon Set
+/*!
+ * Emoticon Array
+ */
+@property (nonatomic, strong) NSArray *emoticonList;
+
+/*!
+ * Read Emoticon Set from Plists
+ * @param filename NSString
+ * @return id (NSArray | NSDictionary)
+ */
+- (id)readEmoticonSetFromPlist:(NSString *)filename;
+
+/*!
+ * Read Emoticon Set from Memory
+ * @param forcefully (YES | NO), if YES read from disk forcefully
+ * @return emoticonList NSArray
+ */
+- (NSArray *)getEmoticonListRefreshForcefully:(BOOL)forcefully;
+
+/*!
+ * Replace Emoticon Text with Image
+ * @param sourceString NSString
+ * @param numOfEmoticon callByReference(* int)
+ * @return resultAttrString NSAttributedString
+ */
+- (NSAttributedString *)replaceEmoticonTextToImageWithString:(NSString *)sourceString;
+- (NSAttributedString *)replaceEmoticonTextToImageWithString:(NSString *)sourceString withAttributes:(NSDictionary *)attributes;
+- (NSAttributedString *)replaceEmoticonTextToImageWithAttributedString:(NSAttributedString *)sourceString withAttributes:(NSDictionary *)attributes;
 
 @end

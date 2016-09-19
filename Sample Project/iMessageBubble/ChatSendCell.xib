@@ -1,10 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A320" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -13,14 +14,13 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="93"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YKH-VG-2an" id="vhR-2A-HLE">
+                <frame key="frameInset" width="320" height="92"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCi-Vu-mlg" userLabel="Bubble">
-                        <rect key="frame" x="95" y="8" width="217" height="76"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r9S-DO-30Z" userLabel="DownCurve">
-                                <rect key="frame" x="167" y="51" width="50" height="25"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.32877448199999998" green="0.43020319940000001" blue="0.66254711150000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="Y1a-87-Kfb"/>
                                     <constraint firstAttribute="width" constant="50" id="l8g-5Z-nT8"/>
@@ -32,48 +32,50 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zoE-7d-N67" userLabel="HidingLayerTop">
-                                <rect key="frame" x="0.0" y="0.0" width="217" height="56"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ghH-2Z-hHd" userLabel="Main">
-                                <rect key="frame" x="0.0" y="0.0" width="187" height="76"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="250" text="chatSendNameLabel" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="xpr-bb-0S5">
-                                        <rect key="frame" x="16" y="8" width="94" height="14"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="chatSendMessageLabel" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="dZ6-Wp-NRE">
-                                        <rect key="frame" x="16" y="30" width="155" height="17"/>
+                                    <textView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="748" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IRK-48-D0p">
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="190" id="qt1-iI-bMD"/>
+                                        </constraints>
+                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
+                                    </textView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="749" text="chatSendTimeLabel" textAlignment="right" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="220" translatesAutoresizingMaskIntoConstraints="NO" id="JWC-SJ-v7v">
-                                        <rect key="frame" x="16" y="55" width="155" height="13"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.32877448201179504" green="0.43020319938659668" blue="0.66254711151123047" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="JWC-SJ-v7v" secondAttribute="bottom" constant="8" id="2XG-ag-5eo"/>
                                     <constraint firstItem="JWC-SJ-v7v" firstAttribute="leading" secondItem="ghH-2Z-hHd" secondAttribute="leading" constant="16" id="4B7-do-jJt"/>
-                                    <constraint firstItem="dZ6-Wp-NRE" firstAttribute="top" secondItem="xpr-bb-0S5" secondAttribute="bottom" constant="8" id="FLw-MO-EgP"/>
                                     <constraint firstAttribute="trailing" secondItem="xpr-bb-0S5" secondAttribute="trailing" constant="16" id="GTg-sX-sS1"/>
-                                    <constraint firstAttribute="centerY" secondItem="dZ6-Wp-NRE" secondAttribute="centerY" id="GWs-xL-jLd"/>
+                                    <constraint firstItem="IRK-48-D0p" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ghH-2Z-hHd" secondAttribute="top" constant="5" id="I0W-Qn-Edc"/>
                                     <constraint firstItem="xpr-bb-0S5" firstAttribute="top" secondItem="ghH-2Z-hHd" secondAttribute="top" constant="8" id="KOS-Id-zBl"/>
-                                    <constraint firstItem="dZ6-Wp-NRE" firstAttribute="leading" secondItem="ghH-2Z-hHd" secondAttribute="leading" constant="16" id="LmJ-KG-iZP"/>
+                                    <constraint firstItem="IRK-48-D0p" firstAttribute="leading" secondItem="ghH-2Z-hHd" secondAttribute="leading" constant="16" id="KPl-Wa-Exg"/>
+                                    <constraint firstItem="JWC-SJ-v7v" firstAttribute="top" secondItem="IRK-48-D0p" secondAttribute="bottom" constant="8" id="LqI-FK-NfR"/>
                                     <constraint firstItem="xpr-bb-0S5" firstAttribute="width" secondItem="ghH-2Z-hHd" secondAttribute="width" multiplier="1:2" priority="750" id="Nqy-Tl-UKw"/>
                                     <constraint firstItem="xpr-bb-0S5" firstAttribute="leading" secondItem="ghH-2Z-hHd" secondAttribute="leading" constant="16" id="PBo-JF-i6K"/>
+                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="IRK-48-D0p" secondAttribute="bottom" constant="5" id="Rhw-fq-p7U"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="38" id="Tpy-MD-BIk"/>
+                                    <constraint firstAttribute="trailing" secondItem="IRK-48-D0p" secondAttribute="trailing" constant="16" id="TuP-BU-d9a"/>
                                     <constraint firstAttribute="trailing" secondItem="JWC-SJ-v7v" secondAttribute="trailing" constant="16" id="bMz-iy-RMW"/>
-                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="dZ6-Wp-NRE" secondAttribute="bottom" constant="5" id="c9n-MM-awB"/>
-                                    <constraint firstAttribute="trailing" secondItem="dZ6-Wp-NRE" secondAttribute="trailing" constant="16" id="kSM-QE-ayM"/>
-                                    <constraint firstItem="dZ6-Wp-NRE" firstAttribute="top" relation="greaterThanOrEqual" secondItem="ghH-2Z-hHd" secondAttribute="top" constant="5" id="khg-V9-0xY"/>
-                                    <constraint firstItem="JWC-SJ-v7v" firstAttribute="top" secondItem="dZ6-Wp-NRE" secondAttribute="bottom" constant="8" id="mEP-LQ-DzM"/>
+                                    <constraint firstItem="IRK-48-D0p" firstAttribute="top" secondItem="xpr-bb-0S5" secondAttribute="bottom" constant="8" id="ywy-Yd-9nz"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -83,13 +85,11 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="GTg-sX-sS1"/>
-                                        <exclude reference="GWs-xL-jLd"/>
                                     </mask>
                                 </variation>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tpf-t4-sub" userLabel="UpCurve">
-                                <rect key="frame" x="187" y="45" width="20" height="32"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.96530920269999998" green="0.94170945880000001" blue="0.908076942" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="20" id="BZG-f0-EqN"/>
                                     <constraint firstAttribute="height" constant="32" id="JA3-12-aKF"/>
@@ -101,16 +101,14 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yXL-JY-EDH" userLabel="HidingLayerSide">
-                                <rect key="frame" x="202" y="44" width="15" height="32"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="15" id="Au7-MS-IvN"/>
                                     <constraint firstAttribute="height" constant="32" id="mHH-cb-2hR"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="user" translatesAutoresizingMaskIntoConstraints="NO" id="iv6-12-M80" userLabel="chatSendUserImage">
-                                <rect key="frame" x="192" y="51" width="25" height="25"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="5ub-Hl-0s3"/>
                                     <constraint firstAttribute="width" constant="25" id="AZp-vw-g1m"/>
@@ -123,7 +121,7 @@
                                 </userDefinedRuntimeAttributes>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="ghH-2Z-hHd" secondAttribute="bottom" id="2X6-3i-bm4"/>
                             <constraint firstAttribute="bottom" secondItem="iv6-12-M80" secondAttribute="bottom" id="7Qg-Mn-tcm"/>
@@ -147,6 +145,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="TCi-Vu-mlg" secondAttribute="bottom" constant="8" id="GE4-kS-dId"/>
                     <constraint firstItem="TCi-Vu-mlg" firstAttribute="top" secondItem="vhR-2A-HLE" secondAttribute="top" constant="8" id="NxN-8m-4wm"/>
@@ -159,8 +158,9 @@
                     </mask>
                 </variation>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
-                <outlet property="chatMessageLabel" destination="dZ6-Wp-NRE" id="OUB-p8-Sab"/>
+                <outlet property="chatMessageLabel" destination="IRK-48-D0p" id="ajg-jS-13b"/>
                 <outlet property="chatNameLabel" destination="xpr-bb-0S5" id="yfG-JX-bvb"/>
                 <outlet property="chatTimeLabel" destination="JWC-SJ-v7v" id="rlL-ez-Yev"/>
                 <outlet property="chatUserImage" destination="iv6-12-M80" id="9jC-Sp-pZs"/>

@@ -12,6 +12,10 @@
 #import "ChatTableViewCellXIB.h"
 #import "ChatCellSettings.h"
 
+
+#define kUsingChatTableViewCellXIB  0
+
+
 @interface iMessage: NSObject
 
 -(id) initIMessageWithName:(NSString *)name
@@ -57,9 +61,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentViewBottomConstraint;
 
 /*Uncomment second line and comment first to use XIB instead of code*/
+#if kUsingChatTableViewCellXIB
+@property (strong,nonatomic) ChatTableViewCellXIB *chatCell;
+#else
 @property (strong,nonatomic) ChatTableViewCell *chatCell;
-//@property (strong,nonatomic) ChatTableViewCellXIB *chatCell;
-
+#endif
 
 @property (strong,nonatomic) ContentView *handler;
 
@@ -122,21 +128,21 @@
     
     /*Uncomment second para and comment first to use XIB instead of code*/
     //Registering custom Chat table view cell for both sending and receiving
-    [[self chatTable] registerClass:[ChatTableViewCell class] forCellReuseIdentifier:@"chatSend"];
-    
-    [[self chatTable] registerClass:[ChatTableViewCell class] forCellReuseIdentifier:@"chatReceive"];
-    
-    
-    /*UINib *nib = [UINib nibWithNibName:@"ChatSendCell" bundle:nil];
+#if kUsingChatTableViewCellXIB
+     UINib *nib = [UINib nibWithNibName:@"ChatSendCell" bundle:nil];
     
     [[self chatTable] registerNib:nib forCellReuseIdentifier:@"chatSend"];
     
     nib = [UINib nibWithNibName:@"ChatReceiveCell" bundle:nil];
     
-    [[self chatTable] registerNib:nib forCellReuseIdentifier:@"chatReceive"];*/
+    [[self chatTable] registerNib:nib forCellReuseIdentifier:@"chatReceive"];
+#else
+    [[self chatTable] registerClass:[ChatTableViewCell class] forCellReuseIdentifier:@"chatSend"];
+
+    [[self chatTable] registerClass:[ChatTableViewCell class] forCellReuseIdentifier:@"chatReceive"];
+#endif
     
-    
-    // Set table view background color to R: 245, G: 237, B: 228 by neoroman
+    // Set table view background color to R: 245, G: 237, B: 228
     [[self chatTable] setBackgroundColor:[UIColor colorWithRed:(245.0f/255.0f) green:(237.0f/255.0f) blue:(228.0f/255.0f) alpha:1.0f]];
 
     
@@ -231,10 +237,14 @@
     if([message.messageType isEqualToString:@"self"])
     {
         /*Uncomment second line and comment first to use XIB instead of code*/
+#if kUsingChatTableViewCellXIB
+        chatCell = (ChatTableViewCellXIB *)[tableView dequeueReusableCellWithIdentifier:@"chatSend"];
+#else
         chatCell = (ChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"chatSend"];
-        //chatCell = (ChatTableViewCellXIB *)[tableView dequeueReusableCellWithIdentifier:@"chatSend"];
-        
-        chatCell.chatMessageLabel.text = message.userMessage;
+#endif
+       
+        //chatCell.chatMessageLabel.text = message.userMessage;
+        chatCell.chatMessageLabel.attributedText = [chatCellSettings replaceEmoticonTextToImageWithString:message.userMessage withAttributes:[chatCellSettings getSenderAttributes]];
         
         chatCell.chatNameLabel.text = message.userName;
         
@@ -243,18 +253,21 @@
         chatCell.chatUserImage.image = [UIImage imageNamed:@"defaultUser"];
         
         /*Comment this line is you are using XIB*/
+#if (! kUsingChatTableViewCellXIB)
         chatCell.authorType = iMessageBubbleTableViewCellAuthorTypeSender;
-        
-        // No need user image for sender by neoroman
-        [chatCellSettings senderUserImageRequired:NO];
+#endif
     }
     else
     {
         /*Uncomment second line and comment first to use XIB instead of code*/
+#if kUsingChatTableViewCellXIB
+        chatCell = (ChatTableViewCellXIB *)[tableView dequeueReusableCellWithIdentifier:@"chatReceive"];
+#else
         chatCell = (ChatTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"chatReceive"];
-        //chatCell = (ChatTableViewCellXIB *)[tableView dequeueReusableCellWithIdentifier:@"chatReceive"];
+#endif
         
-        chatCell.chatMessageLabel.text = message.userMessage;
+        //chatCell.chatMessageLabel.text = message.userMessage;
+        chatCell.chatMessageLabel.attributedText = [chatCellSettings replaceEmoticonTextToImageWithString:message.userMessage withAttributes:[chatCellSettings getReceiverAttributes]];
         
         chatCell.chatNameLabel.text = message.userName;
         
@@ -263,7 +276,9 @@
         chatCell.chatUserImage.image = [UIImage imageNamed:@"defaultUser"];
 
         /*Comment this line is you are using XIB*/
+#if (! kUsingChatTableViewCellXIB)
         chatCell.authorType = iMessageBubbleTableViewCellAuthorTypeReceiver;
+#endif
     }
     
     return chatCell;
@@ -281,33 +296,43 @@
     CGSize Messagesize;
     
     NSArray *fontArray = [[NSArray alloc] init];
-    
+    CGFloat bubbleWidth = 220.f;
+    NSAttributedString *userMessage = nil;
     //Get the chal cell font settings. This is to correctly find out the height of each of the cell according to the text written in those cells which change according to their fonts and sizes.
     //If you want to keep the same font sizes for both sender and receiver cells then remove this code and manually enter the font name with size in Namesize, Messagesize and Timesize.
     if([message.messageType isEqualToString:@"self"])
     {
         fontArray = chatCellSettings.getSenderBubbleFontWithSize;
+        [chatCellSettings setSenderChatMessageLabelWidth:190.0f];
+        bubbleWidth = [chatCellSettings getSenderChatMessageLabelWidth];
+        userMessage = [chatCellSettings replaceEmoticonTextToImageWithString:message.userMessage withAttributes:[chatCellSettings getSenderAttributes]];
     }
     else
     {
         fontArray = chatCellSettings.getReceiverBubbleFontWithSize;
+        [chatCellSettings setReceiverChatMessageLabelWidth:165.0f];
+        bubbleWidth = [chatCellSettings getReceiverChatMessageLabelWidth];
+        userMessage = [chatCellSettings replaceEmoticonTextToImageWithString:message.userMessage withAttributes:[chatCellSettings getReceiverAttributes]];
     }
     
     //Find the required cell height
-    Namesize = [@"Name" boundingRectWithSize:CGSizeMake(220.0f, CGFLOAT_MAX)
+    Namesize = [@"Name" boundingRectWithSize:CGSizeMake(bubbleWidth, CGFLOAT_MAX)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                   attributes:@{NSFontAttributeName:fontArray[0]}
                                      context:nil].size;
     
-    
-    
-    Messagesize = [message.userMessage boundingRectWithSize:CGSizeMake(220.0f, CGFLOAT_MAX)
+    /* Change this for AttributedString -[boundingRectWithSize:...]
+    Messagesize = [message.userMessage boundingRectWithSize:CGSizeMake(bubbleWidth, CGFLOAT_MAX)
                                                    options:NSStringDrawingUsesLineFragmentOrigin
                                                 attributes:@{NSFontAttributeName:fontArray[1]}
                                                    context:nil].size;
+     */
+    Messagesize = [userMessage boundingRectWithSize:CGSizeMake(bubbleWidth, CGFLOAT_MAX)
+                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                            context:nil].size;
     
     
-    Timesize = [@"Time" boundingRectWithSize:CGSizeMake(220.0f, CGFLOAT_MAX)
+    Timesize = [@"Time" boundingRectWithSize:CGSizeMake(bubbleWidth, CGFLOAT_MAX)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                   attributes:@{NSFontAttributeName:fontArray[2]}
                                      context:nil].size;

@@ -94,8 +94,20 @@ static ChatCellSettings *chatCellSettings = nil;
     
     [chatTimeLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     
-    chatMessageLabel = [[UILabel alloc] init];
-    
+    chatMessageLabel = [[UITextView alloc] initWithFrame:CGRectMake(Main.bounds.origin.x, Main.bounds.origin.y, 220.0f, 20.0f)];
+    chatMessageLabel.textAlignment = NSTextAlignmentLeft;
+    chatMessageLabel.scrollEnabled = NO;
+    chatMessageLabel.editable = NO;
+    chatMessageLabel.selectable = YES;
+    chatMessageLabel.userInteractionEnabled = YES;
+    chatMessageLabel.dataDetectorTypes = UIDataDetectorTypePhoneNumber | UIDataDetectorTypeLink;
+    chatMessageLabel.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
+    chatMessageLabel.textContainer.lineFragmentPadding = 0.0f;
+    chatMessageLabel.textContainerInset = UIEdgeInsetsZero;
+    chatMessageLabel.contentInset = UIEdgeInsetsZero;
+    chatMessageLabel.layoutMargins = UIEdgeInsetsZero;
+    chatMessageLabel.backgroundColor = [UIColor clearColor];
+
     [chatMessageLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     [self.contentView addSubview:Bubble];
@@ -120,11 +132,9 @@ static ChatCellSettings *chatCellSettings = nil;
     
     chatMessageLabel.text = @"chatMessageLabel";
     
-    [chatMessageLabel setNumberOfLines:0];
     [chatNameLabel setNumberOfLines:1];
     [chatTimeLabel setNumberOfLines:1];
     
-    chatMessageLabel.lineBreakMode = NSLineBreakByWordWrapping;
     chatNameLabel.lineBreakMode = NSLineBreakByClipping;
     chatTimeLabel.lineBreakMode = NSLineBreakByWordWrapping;
     
@@ -289,8 +299,6 @@ static ChatCellSettings *chatCellSettings = nil;
     
     chatTimeLabel.textAlignment = NSTextAlignmentRight;
     
-    [chatMessageLabel setPreferredMaxLayoutWidth:[chatCellSettings getMessageLabelWidth]];
-    
     return self;
 }
 
@@ -311,6 +319,11 @@ static ChatCellSettings *chatCellSettings = nil;
     
     if(type == iMessageBubbleTableViewCellAuthorTypeSender)
     {
+        //Setting the constraints for chatMessageLabel. It should be constrained by width, i.e., Main.
+        
+        width = [NSLayoutConstraint constraintWithItem:chatMessageLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:[chatCellSettings getSenderChatMessageLabelWidth]];
+        [Main addConstraints:@[width]];
+
         //Setting constraints for Bubble. It should be at a zero distance from top, bottom and 8 distance right hand side of the superview, i.e., self.contentView (The default superview for all tableview cell elements)
         
         horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[Bubble]-8-|" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(Bubble)];
@@ -420,18 +433,15 @@ static ChatCellSettings *chatCellSettings = nil;
         chatNameLabel.font = fontWithSize[0];
         chatMessageLabel.font = fontWithSize[1];
         chatTimeLabel.font = fontWithSize[2];
-        
-        if (![chatCellSettings getSenderUserImage]) {
-            [chatUserImage setHidden:YES];
-        }
-        else {
-            [chatUserImage setHidden:NO];
-        }
-        
-        [chatCellSettings setMessageLabelWidth:190.0f];
+                
     }
     else
     {
+        //Setting the constraints for chatMessageLabel. It should be constrained by width, i.e., Main.
+
+        width = [NSLayoutConstraint constraintWithItem:chatMessageLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.f constant:[chatCellSettings getReceiverChatMessageLabelWidth]];
+        [Main addConstraints:@[width]];
+
         //Setting constraints for Bubble. It should be at a zero distance from top, bottom and 8 distance from left hand side of the superview, i.e., self.contentView (The default superview for all tableview cell elements)
         
         horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-8-[Bubble]" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(Bubble)];
@@ -461,12 +471,7 @@ static ChatCellSettings *chatCellSettings = nil;
         
         //Setting constraints for DownCurve. It should be at a 0 distance from left and bottom of superview and -20 distance from Main on the right. Its superview is Bubble. The height and width should be 25 and 50 respectively.
         
-        if ([chatCellSettings getSenderUserImage]) {
-            horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[DownCurve]-(-20)-[Main]" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(DownCurve,Main)];
-        }
-        else {
-            horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[DownCurve]-(0)-[Main]" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(DownCurve,Main)];
-        }
+        horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[DownCurve]-(-20)-[Main]" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(DownCurve,Main)];
         
         [Bubble addConstraints:horizontal];
         
@@ -496,16 +501,12 @@ static ChatCellSettings *chatCellSettings = nil;
         
         //Setting constraints for chatUserImage. Its superview is Bubble. It should be at 0 distance from left and bottom of superview and 5 distance from Main on the right. Height and width should be 25 and 25.
         
-        if ([chatCellSettings getSenderUserImage]) {
-            
-            horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[chatUserImage]-5-[Main]" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(chatUserImage,Main)];
-            
-            vertical = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[chatUserImage]-0-|" options:NSLayoutFormatAlignAllBottom metrics:nil views:NSDictionaryOfVariableBindings(chatUserImage)];
-            
-            
-            [Bubble addConstraints:horizontal];
-            
-        }
+        horizontal = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[chatUserImage]-5-[Main]" options:NSLayoutFormatDirectionLeftToRight metrics:nil views:NSDictionaryOfVariableBindings(chatUserImage,Main)];
+        
+        vertical = [NSLayoutConstraint constraintsWithVisualFormat:@"V:[chatUserImage]-0-|" options:NSLayoutFormatAlignAllBottom metrics:nil views:NSDictionaryOfVariableBindings(chatUserImage)];
+        
+        
+        [Bubble addConstraints:horizontal];
         
         // /////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -552,7 +553,6 @@ static ChatCellSettings *chatCellSettings = nil;
         chatMessageLabel.font = fontWithSize[1];
         chatTimeLabel.font = fontWithSize[2];
         
-        [chatCellSettings setMessageLabelWidth:165.0f];
     }
 }
 

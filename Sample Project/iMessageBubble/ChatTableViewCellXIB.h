@@ -11,7 +11,7 @@
 @interface ChatTableViewCellXIB : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *chatNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *chatMessageLabel;
+@property (weak, nonatomic) IBOutlet UITextView *chatMessageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *chatTimeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *chatUserImage;
 

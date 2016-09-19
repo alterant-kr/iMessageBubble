@@ -7,6 +7,7 @@
 //
 
 #import "ChatCellSettings.h"
+#import "NSAttributedString+Extension.h"
 
 @interface UIColor(HexString)
 
@@ -71,7 +72,6 @@ UIColor *receiverBubbleColor;
 
 BOOL senderBubbleTail;
 BOOL receiverBubbleTail;
-BOOL senderUserImage;
 
 UIColor *senderBubbleNameTextColor;
 
@@ -93,7 +93,11 @@ UIFont *receiverBubbleNameFontWithSize;
 UIFont *receiverBubbleMessageFontWithSize;
 UIFont *receiverBubbleTimeFontWithSize;
 
-CGFloat messageLabelWidth;
+CGFloat senderChatMessageLabelWidth;
+CGFloat receiverChatMessageLabelWidth;
+
+NSDictionary *senderAttributes;
+NSDictionary *receiverAttributes;
 
 //Singleton instance
 static ChatCellSettings *instance = nil;
@@ -126,16 +130,25 @@ static ChatCellSettings *instance = nil;
         senderBubbleTimeFontWithSize = [UIFont systemFontOfSize:11];
         
         receiverBubbleNameFontWithSize = [UIFont boldSystemFontOfSize:11];
-        receiverBubbleMessageFontWithSize = [UIFont systemFontOfSize:14];
+        receiverBubbleMessageFontWithSize = [UIFont systemFontOfSize:20];
         receiverBubbleTimeFontWithSize = [UIFont systemFontOfSize:11];
         
         senderBubbleTail = YES;
         
         receiverBubbleTail = YES;
+                
+        senderChatMessageLabelWidth = 220.0f;
+        receiverChatMessageLabelWidth = 220.0f;
         
-        senderUserImage = YES;
-        
-        messageLabelWidth = 190.0;
+        NSMutableParagraphStyle *paragraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
+        paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
+        senderAttributes = @{NSForegroundColorAttributeName: senderBubbleMessageTextColor,
+                                     NSFontAttributeName: senderBubbleMessageFontWithSize,
+                                     NSParagraphStyleAttributeName : paragraphStyle};
+
+        receiverAttributes = @{NSForegroundColorAttributeName: receiverBubbleMessageTextColor,
+                             NSFontAttributeName: receiverBubbleMessageFontWithSize,
+                             NSParagraphStyleAttributeName : paragraphStyle};
     });
     
     return instance;
@@ -303,23 +316,205 @@ static ChatCellSettings *instance = nil;
 
 #pragma mark - More customized method
 /*!
- * More customizes by neoroman
+ * More customizes
  */
-- (BOOL)getSenderUserImage
+- (CGFloat)getSenderChatMessageLabelWidth
 {
-    return senderUserImage;
+    return senderChatMessageLabelWidth;
 }
-- (void)senderUserImageRequired:(BOOL)isRequiredOrNot
+- (void)setSenderChatMessageLabelWidth:(CGFloat)width
 {
-    senderUserImage = isRequiredOrNot;
+    senderChatMessageLabelWidth = width;
 }
-- (CGFloat)getMessageLabelWidth
+- (CGFloat)getReceiverChatMessageLabelWidth
 {
-    return messageLabelWidth;
+    return receiverChatMessageLabelWidth;
 }
-- (void)setMessageLabelWidth:(CGFloat)width
+- (void)setReceiverChatMessageLabelWidth:(CGFloat)width
 {
-    messageLabelWidth = width;
+    receiverChatMessageLabelWidth = width;
+}
+- (NSDictionary *)getSenderAttributes
+{
+    return senderAttributes;
+}
+- (void)setSenderAttributes:(NSDictionary *)attributes
+{
+    senderAttributes = attributes;
+}
+- (NSDictionary *)getReceiverAttributes
+{
+    return receiverAttributes;
+}
+- (void)setReceiverAttributes:(NSDictionary *)attributes
+{
+    receiverAttributes = attributes;
+}
+
+#pragma mark - Read Emoticon Set
+/*!
+ * Read Emoticon Set from Plists
+ * @param filename NSString
+ * @return id (NSArray | NSDictionary)
+ */
+- (id)readEmoticonSetFromPlist:(NSString *)filename
+{
+    NSString *setPath = [[NSBundle mainBundle] pathForResource:@"BasicSet" ofType:@"plist"];
+    
+    if (filename) {
+        if ([filename hasPrefix:@"plist"]) {
+            setPath = [[NSBundle mainBundle] pathForResource:[filename stringByDeletingPathExtension] ofType:filename.pathExtension];
+        }
+        else {
+            setPath = [[NSBundle mainBundle] pathForResource:[filename stringByDeletingPathExtension] ofType:@"plist"];
+        }
+        
+    }
+    
+    if (setPath) {
+        id aSet = [NSArray arrayWithContentsOfFile:setPath];
+        
+        if ([aSet isKindOfClass:[NSDictionary class]]) {
+            return [NSDictionary dictionaryWithContentsOfFile:setPath];
+        }
+        else {
+            return aSet;
+        }
+    }
+    
+    return nil;
+}
+
+/*!
+ * Read Emoticon Set from Memory
+ * @param forcefully (YES | NO), if YES read from disk forcefully
+ * @return emoticonList NSArray
+ */
+- (NSArray *)getEmoticonListRefreshForcefully:(BOOL)forcefully
+{
+    if (!forcefully && self.emoticonList && self.emoticonList.count > 0) {
+        return self.emoticonList;
+    }
+    
+    self.emoticonList = [NSArray arrayWithArray:[self readEmoticonSetFromPlist:nil]];
+    
+    return self.emoticonList;
+}
+/*!
+ *
+ *
+ */
+- (NSString *)getImageNameOfEmoticonName:(NSString *)title
+{
+    for (NSDictionary *obj in [self getEmoticonListRefreshForcefully:NO]) {
+        if ([obj[@"keyword"] isEqualToString:title]) {
+            return obj[@"imageName"];
+        }
+        
+    }
+    
+    return nil;
+}
+
+/*!
+ * Replace Emoticon Text with Image
+ * @param sourceString NSString
+ * @return resultAttrString NSAttributedString
+ */
+- (NSAttributedString *)replaceEmoticonTextToImageWithString:(NSString *)sourceString
+{
+    return [self replaceEmoticonTextToImageWithString:sourceString withAttributes:nil];
+}
+- (NSAttributedString *)replaceEmoticonTextToImageWithString:(NSString *)sourceString withAttributes:(NSDictionary *)attributes
+{
+    if (attributes) {
+        return [self replaceEmoticonTextToImageWithAttributedString:[[NSAttributedString alloc] initWithString:sourceString attributes:attributes] withAttributes:attributes];
+    }
+    else {
+        return [self replaceEmoticonTextToImageWithAttributedString:[[NSAttributedString alloc] initWithString:sourceString] withAttributes:attributes];
+    }
+}
+- (NSAttributedString *)replaceEmoticonTextToImageWithAttributedString:(NSAttributedString *)sourceString withAttributes:(NSDictionary *)attributes
+{
+    NSUInteger location = 0;
+    NSUInteger length = 1;
+    BOOL isDetected = NO;
+    NSMutableString *inputText = [NSMutableString stringWithString:sourceString.string];
+    
+    NSMutableAttributedString *resultAttrString = [[NSMutableAttributedString alloc] init];
+    
+    for (NSUInteger i = location; i < inputText.length && inputText.length > 0; i++) {
+        
+        NSString *searchString = [inputText substringWithRange:NSMakeRange(i, 1)];
+        if (isDetected == NO && [searchString isEqualToString:@"("] == YES && inputText.length != i+1) {
+            location = i;
+            length = 1;
+            isDetected = YES;
+        }
+        
+        if (isDetected) {
+            if ([searchString isEqualToString:@")"] == YES || i == inputText.length-1) {
+                
+                NSString *emoticonString = [inputText substringWithRange:NSMakeRange(location, length)];
+                NSString *emoticonImageName = [self getImageNameOfEmoticonName:emoticonString];
+                
+                if (emoticonImageName != nil) {
+                    
+                    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+                    [attachment setBounds:[self getEmoticonRectWithFontPointSize:((UIFont *)attributes[NSFontAttributeName]).pointSize]];
+                    UIImage *emoticonImage = [UIImage imageNamed:emoticonImageName];
+                    attachment.image = emoticonImage;
+                    
+                    
+                    NSTextAttachment *spaceAttachment = [[NSTextAttachment alloc] init];
+                    [spaceAttachment setBounds:CGRectMake(0, -3, 1, 1)];
+                    
+                    NSAttributedString *spaceAttrString = [NSAttributedString attributedStringWithAttachment:spaceAttachment];
+                    NSAttributedString *imageAttrString = [NSAttributedString attributedStringWithAttachment:attachment];
+                    
+                    [resultAttrString appendAttributedString:spaceAttrString];
+                    [resultAttrString appendAttributedString:imageAttrString];
+                    [resultAttrString appendAttributedString:spaceAttrString];
+                    
+                } else {
+                    
+                    if (i == inputText.length-1 && [searchString isEqualToString:@"("] == YES) {
+                        NSString *subString = [inputText substringWithRange:NSMakeRange(location, length)];
+                        [resultAttrString appendAttributedString:[NSAttributedString attributedStringWithString:subString attributes:attributes]];
+                        
+                    } else {
+                        [resultAttrString appendAttributedString:[NSAttributedString attributedStringWithString:emoticonString attributes:attributes]];
+                    }
+                }
+                
+                isDetected = NO;
+                continue;
+            }
+            
+            length++;
+            
+        } else {
+            [resultAttrString appendAttributedString:[NSAttributedString attributedStringWithString:searchString attributes:attributes]];
+        }
+    }
+    
+    return resultAttrString;
+}
+
+
+#pragma mark - Private methods
+- (CGRect)getEmoticonRect
+{
+    CGFloat fontPointSize = MAX(((UIFont *)[self getSenderBubbleFontWithSize][1]).pointSize, ((UIFont *)[self getReceiverBubbleFontWithSize][1]).pointSize);
+    return [self getEmoticonRectWithFontPointSize:fontPointSize];
+}
+- (CGRect)getEmoticonRectWithFontPointSize:(CGFloat)pointSize
+{
+    if (pointSize < ((UIFont *)[self getSenderBubbleFontWithSize][1]).pointSize) {
+        pointSize = MAX(((UIFont *)[self getSenderBubbleFontWithSize][1]).pointSize, ((UIFont *)[self getReceiverBubbleFontWithSize][1]).pointSize);
+    }
+    
+    return CGRectMake(0.0f, -3.0f, pointSize+2.0f, pointSize+2.0f);
 }
 
 @end
