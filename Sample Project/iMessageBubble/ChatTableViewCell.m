@@ -100,6 +100,7 @@ static ChatCellSettings *chatCellSettings = nil;
     
     [self.contentView addSubview:Bubble];
     
+    
     [Bubble addSubview:DownCurve];
     [Bubble addSubview:HidingLayerTop];
     [Bubble addSubview:Main];
@@ -273,16 +274,18 @@ static ChatCellSettings *chatCellSettings = nil;
     
     // /////////////////////////////////////////////////////////////////////////////////////////////
     
-    self.contentView.backgroundColor = [UIColor whiteColor];
-
+    // Modify background color to clear color by neoroman
+    //self.contentView.backgroundColor = [UIColor whiteColor];
+    [self.contentView setBackgroundColor:[UIColor clearColor]];
+    [self setBackgroundColor:[UIColor clearColor]];
     
-    Bubble.backgroundColor = [UIColor whiteColor];
+    Bubble.backgroundColor = [UIColor clearColor];
     
-    UpCurve.backgroundColor = [UIColor whiteColor];
+    UpCurve.backgroundColor = [UIColor colorWithRed:(245.0f/255.0f) green:(237.0f/255.0f) blue:(228.0f/255.0f) alpha:1.0f];
     
-    HidingLayerTop.backgroundColor = [UIColor whiteColor];
+    HidingLayerTop.backgroundColor = [UIColor clearColor];
     
-    HidingLayerSide.backgroundColor = [UIColor whiteColor];
+    HidingLayerSide.backgroundColor = [UIColor clearColor];
     
     chatTimeLabel.textAlignment = NSTextAlignmentRight;
     
@@ -417,6 +420,14 @@ static ChatCellSettings *chatCellSettings = nil;
         chatNameLabel.font = fontWithSize[0];
         chatMessageLabel.font = fontWithSize[1];
         chatTimeLabel.font = fontWithSize[2];
+        
+        if (![chatCellSettings getSenderUserImage]) {
+            [chatUserImage setHidden:YES];
+        }
+        else {
+            [chatUserImage setHidden:NO];
+        }
+        
     }
     else
     {

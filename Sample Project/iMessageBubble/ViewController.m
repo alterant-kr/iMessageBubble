@@ -92,24 +92,24 @@
     //[chatCellSettings setSenderBubbleTimeTextColor:[UIColor colorWithRed:(255.0f/255.0f) green:(255.0f/255.0f) blue:(255.0f/255.0f) alpha:1.0f]];
     //[chatCellSettings setReceiverBubbleTimeTextColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0f]];
     
-    [chatCellSettings setSenderBubbleColorHex:@"007AFF"];
-    [chatCellSettings setReceiverBubbleColorHex:@"DFDEE5"];
-    [chatCellSettings setSenderBubbleNameTextColorHex:@"FFFFFF"];
-    [chatCellSettings setReceiverBubbleNameTextColorHex:@"000000"];
-    [chatCellSettings setSenderBubbleMessageTextColorHex:@"FFFFFF"];
-    [chatCellSettings setReceiverBubbleMessageTextColorHex:@"000000"];
-    [chatCellSettings setSenderBubbleTimeTextColorHex:@"FFFFFF"];
-    [chatCellSettings setReceiverBubbleTimeTextColorHex:@"000000"];
-    
-    [chatCellSettings setSenderBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
-    [chatCellSettings setReceiverBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
-    [chatCellSettings setSenderBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
-    [chatCellSettings setReceiverBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
-    [chatCellSettings setSenderBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
-    [chatCellSettings setReceiverBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
-    
-    [chatCellSettings senderBubbleTailRequired:YES];
-    [chatCellSettings receiverBubbleTailRequired:YES];
+//    [chatCellSettings setSenderBubbleColorHex:@"007AFF"];
+//    [chatCellSettings setReceiverBubbleColorHex:@"DFDEE5"];
+//    [chatCellSettings setSenderBubbleNameTextColorHex:@"FFFFFF"];
+//    [chatCellSettings setReceiverBubbleNameTextColorHex:@"000000"];
+//    [chatCellSettings setSenderBubbleMessageTextColorHex:@"FFFFFF"];
+//    [chatCellSettings setReceiverBubbleMessageTextColorHex:@"000000"];
+//    [chatCellSettings setSenderBubbleTimeTextColorHex:@"FFFFFF"];
+//    [chatCellSettings setReceiverBubbleTimeTextColorHex:@"000000"];
+//    
+//    [chatCellSettings setSenderBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
+//    [chatCellSettings setReceiverBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
+//    [chatCellSettings setSenderBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
+//    [chatCellSettings setReceiverBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
+//    [chatCellSettings setSenderBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
+//    [chatCellSettings setReceiverBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
+//    
+//    [chatCellSettings senderBubbleTailRequired:YES];
+//    [chatCellSettings receiverBubbleTailRequired:YES];
     
     self.navigationItem.title = @"iMessageBubble Demo";
     
@@ -136,8 +136,9 @@
     [[self chatTable] registerNib:nib forCellReuseIdentifier:@"chatReceive"];*/
     
     
-    
-    
+    // Set table view background color to R: 245, G: 237, B: 228 by neoroman
+    [[self chatTable] setBackgroundColor:[UIColor colorWithRed:(245.0f/255.0f) green:(237.0f/255.0f) blue:(228.0f/255.0f) alpha:1.0f]];
+
     
     
     //Instantiating custom view that adjusts itself to keyboard show/hide
@@ -243,6 +244,9 @@
         
         /*Comment this line is you are using XIB*/
         chatCell.authorType = iMessageBubbleTableViewCellAuthorTypeSender;
+        
+        // No need user image for sender by neoroman
+        [chatCellSettings senderUserImageRequired:NO];
     }
     else
     {

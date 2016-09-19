@@ -47,4 +47,10 @@
 -(BOOL) getSenderBubbleTail;
 -(BOOL) getReceiverBubbleTail;
 
+/*!
+ * More customizes by neoroman
+ */
+- (BOOL)getSenderUserImage;
+- (void)senderUserImageRequired:(BOOL)isRequiredOrNot;
+
 @end
