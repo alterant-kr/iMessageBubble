@@ -12,9 +12,6 @@
 @interface ChatTableViewCell ()
 
 @property (strong, nonatomic) UIView *Bubble;
-@property (strong, nonatomic) UIView *Main;
-@property (strong, nonatomic) UIView *UpCurve;
-@property (strong, nonatomic) UIView *DownCurve;
 @property (strong, nonatomic) UIView *HidingLayerTop;
 @property (strong, nonatomic) UIView *HidingLayerSide;
 

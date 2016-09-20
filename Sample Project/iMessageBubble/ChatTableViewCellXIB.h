@@ -14,6 +14,9 @@
 @property (weak, nonatomic) IBOutlet UITextView *chatMessageLabel;
 @property (weak, nonatomic) IBOutlet UILabel *chatTimeLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *chatUserImage;
+@property (weak, nonatomic) IBOutlet UIView *Main;
+@property (weak, nonatomic) IBOutlet UIView *UpCurve;
+@property (weak, nonatomic) IBOutlet UIView *DownCurve;
 
 
 @end

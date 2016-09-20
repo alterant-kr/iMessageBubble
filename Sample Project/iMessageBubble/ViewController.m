@@ -21,12 +21,14 @@
 -(id) initIMessageWithName:(NSString *)name
                      message:(NSString *)message
                         time:(NSString *)time
-                      type:(NSString *)type;
+                      type:(NSString *)type
+                    status:(NSString *)status;
 
 @property (strong, nonatomic) NSString *userName;
 @property (strong, nonatomic) NSString *userMessage;
 @property (strong, nonatomic) NSString *userTime;
 @property (strong, nonatomic) NSString *messageType;
+@property (strong, nonatomic) NSString *messageStatus;
 
 @end
 
@@ -36,6 +38,7 @@
                      message:(NSString *)message
                         time:(NSString *)time
                       type:(NSString *)type
+                    status:(NSString *)status
 {
     self = [super init];
     if(self)
@@ -44,6 +47,7 @@
         self.userMessage = message;
         self.userTime = time;
         self.messageType = type;
+        self.messageStatus = status;
     }
     
     return self;
@@ -98,25 +102,29 @@
     //[chatCellSettings setSenderBubbleTimeTextColor:[UIColor colorWithRed:(255.0f/255.0f) green:(255.0f/255.0f) blue:(255.0f/255.0f) alpha:1.0f]];
     //[chatCellSettings setReceiverBubbleTimeTextColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0f]];
     
-//    [chatCellSettings setSenderBubbleColorHex:@"007AFF"];
-//    [chatCellSettings setReceiverBubbleColorHex:@"DFDEE5"];
-//    [chatCellSettings setSenderBubbleNameTextColorHex:@"FFFFFF"];
-//    [chatCellSettings setReceiverBubbleNameTextColorHex:@"000000"];
-//    [chatCellSettings setSenderBubbleMessageTextColorHex:@"FFFFFF"];
-//    [chatCellSettings setReceiverBubbleMessageTextColorHex:@"000000"];
-//    [chatCellSettings setSenderBubbleTimeTextColorHex:@"FFFFFF"];
-//    [chatCellSettings setReceiverBubbleTimeTextColorHex:@"000000"];
-//    
-//    [chatCellSettings setSenderBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
-//    [chatCellSettings setReceiverBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
-//    [chatCellSettings setSenderBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
-//    [chatCellSettings setReceiverBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
-//    [chatCellSettings setSenderBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
-//    [chatCellSettings setReceiverBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
-//    
-//    [chatCellSettings senderBubbleTailRequired:YES];
-//    [chatCellSettings receiverBubbleTailRequired:YES];
+    [chatCellSettings setSenderBubbleColorHex:@"007AFF"];
+    [chatCellSettings setReceiverBubbleColorHex:@"DFDEE5"];
+    [chatCellSettings setSenderBubbleNameTextColorHex:@"FFFFFF"];
+    [chatCellSettings setReceiverBubbleNameTextColorHex:@"000000"];
+    [chatCellSettings setSenderBubbleMessageTextColorHex:@"FFFFFF"];
+    [chatCellSettings setReceiverBubbleMessageTextColorHex:@"000000"];
+    [chatCellSettings setSenderBubbleTimeTextColorHex:@"FFFFFF"];
+    [chatCellSettings setReceiverBubbleTimeTextColorHex:@"000000"];
     
+    [chatCellSettings setSenderBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
+    [chatCellSettings setReceiverBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
+    [chatCellSettings setSenderBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
+    [chatCellSettings setReceiverBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
+    [chatCellSettings setSenderBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
+    [chatCellSettings setReceiverBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
+    
+    [chatCellSettings senderBubbleTailRequired:YES];
+    [chatCellSettings receiverBubbleTailRequired:YES];
+
+    // Set table view background color to R: 245, G: 237, B: 228
+    [[self chatTable] setBackgroundColor:[UIColor colorWithRed:(245.0f/255.0f) green:(237.0f/255.0f) blue:(228.0f/255.0f) alpha:1.0f]];
+    
+
     self.navigationItem.title = @"iMessageBubble Demo";
     
     [[self chatTable] setSeparatorStyle:UITableViewCellSeparatorStyleNone];
@@ -141,10 +149,6 @@
 
     [[self chatTable] registerClass:[ChatTableViewCell class] forCellReuseIdentifier:@"chatReceive"];
 #endif
-    
-    // Set table view background color to R: 245, G: 237, B: 228
-    [[self chatTable] setBackgroundColor:[UIColor colorWithRed:(245.0f/255.0f) green:(237.0f/255.0f) blue:(228.0f/255.0f) alpha:1.0f]];
-
     
     
     //Instantiating custom view that adjusts itself to keyboard show/hide
@@ -175,14 +179,9 @@
     {
         iMessage *sendMessage;
     
-        sendMessage = [[iMessage alloc] initIMessageWithName:@"Prateek Grover" message:self.chatTextView.text time:@"23:14" type:@"self"];
+        sendMessage = [[iMessage alloc] initIMessageWithName:@"Prateek Grover" message:self.chatTextView.text time:@"23:14" type:@"self" status:@"sending"];
     
-        if ([chatCellSettings getUseSendingBubbleEffect]) {
-            [self updateTableViewForSender:sendMessage];
-        }
-        else {
-            [self updateTableView:sendMessage];
-        }
+        [self updateTableView:sendMessage];
     }
 }
 
@@ -192,7 +191,7 @@
     {
         iMessage *receiveMessage;
     
-        receiveMessage = [[iMessage alloc] initIMessageWithName:@"Prateek Grover" message:self.chatTextView.text time:@"23:14" type:@"other"];
+        receiveMessage = [[iMessage alloc] initIMessageWithName:@"Prateek Grover" message:self.chatTextView.text time:@"23:14" type:@"other" status:@"received"];
     
         [self updateTableView:receiveMessage];
     }
@@ -219,33 +218,6 @@
         NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.chatTable numberOfRowsInSection:0]-1 inSection:0];
         [self.chatTable scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:UITableViewRowAnimationLeft];
     }
-}
-- (void)updateTableViewForSender:(iMessage *)msg
-{
-    NSAttributedString *userMessage = [chatCellSettings replaceEmoticonTextToImageWithString:self.chatTextView.text withAttributes:[chatCellSettings getSenderAttributes]];
-    CGFloat height = [userMessage boundingRectWithSize:CGSizeMake([chatCellSettings getSenderChatMessageLabelWidth], CGFLOAT_MAX)
-                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                               context:nil].size.height + 48.0f + 14.0f;
-    [self.handler textViewDidChange:self.chatTextView heightOfMessage:height bubbleEffect:^{
-        
-        [self.chatTable beginUpdates];
-        
-        NSIndexPath *row1 = [NSIndexPath indexPathForRow:currentMessages.count inSection:0];
-        
-        [currentMessages insertObject:msg atIndex:currentMessages.count];
-        
-        [self.chatTable insertRowsAtIndexPaths:[NSArray arrayWithObjects:row1, nil] withRowAnimation:UITableViewRowAnimationNone];
-        
-        [self.chatTable endUpdates];
-        
-        //Always scroll the chat table when the user sends the message
-        if([self.chatTable numberOfRowsInSection:0]!=0)
-        {
-            NSIndexPath* ip = [NSIndexPath indexPathForRow:[self.chatTable numberOfRowsInSection:0]-1 inSection:0];
-            [self.chatTable scrollToRowAtIndexPath:ip atScrollPosition:UITableViewScrollPositionBottom animated:UITableViewRowAnimationLeft];
-        }
-        
-    }];
 }
 
 
@@ -378,27 +350,85 @@
 {
     if ([chatCellSettings getUseSendingBubbleEffect]) {
         iMessage *message = [currentMessages objectAtIndex:indexPath.row];
-        if([message.messageType isEqualToString:@"self"]) {
+        if([message.messageType isEqualToString:@"self"] && [message.messageStatus isEqualToString:@"sending"]) {
             if ([cell isKindOfClass:NSClassFromString(@"ChatTableViewCell")]) {
                 ChatTableViewCell *aCell = (ChatTableViewCell *)cell;
                 
-                aCell.chatMessageLabel.alpha = 0.0f;
+                aCell.chatUserImage.alpha = 0.0;
+                aCell.UpCurve.alpha = 0.0;
+                aCell.DownCurve.alpha = 0.0;
+                aCell.Main.alpha = 0.0f;
                 
-                [UIView animateWithDuration:0.65f animations:^{
-                    aCell.chatMessageLabel.alpha = 1.0f;
-                }];
+                [self animateSendingBubble:aCell.Main others:@[aCell.chatUserImage, aCell.UpCurve, aCell.DownCurve]];
+
             }
             else {
                 ChatTableViewCellXIB *aCell = (ChatTableViewCellXIB *)cell;
                 
-                aCell.chatMessageLabel.alpha = 0.0f;
+                aCell.chatUserImage.alpha = 0.0;
+                aCell.UpCurve.alpha = 0.0;
+                aCell.DownCurve.alpha = 0.0;
+                aCell.Main.alpha = 0.0f;
                 
-                [UIView animateWithDuration:0.65f animations:^{
-                    aCell.chatMessageLabel.alpha = 1.0f;
-                }];
+                [self animateSendingBubble:aCell.Main others:@[aCell.chatUserImage, aCell.UpCurve, aCell.DownCurve]];
+
             }
+            
+            message.messageStatus = @"sent";
         }
     }
 }
+
+- (void)animateSendingBubble:(UIView *)targetView others:(NSArray *)objects
+{
+    if (targetView) {
+        CGFloat xDist = -targetView.frame.size.width;
+        CGFloat yDist = 10.0f;
+        
+        targetView.layer.transform = CATransform3DMakeTranslation(xDist, yDist, 10.0f);
+        //targetView.layer.transform = CATransform3DScale(targetView.layer.transform, 0.5f, 1.5f, 1.5f);
+        targetView.layer.zPosition = 1000.0f;
+        
+       [UIView animateWithDuration:0.001 delay:0.4 options:UIViewAnimationOptionTransitionNone animations:^{
+
+           [UIView animateWithDuration:0.2f
+                                 delay:0.0f
+                               options:UIViewAnimationOptionCurveEaseIn
+                            animations:^{
+                                
+                                targetView.alpha = 1.0f;
+                                
+                            } completion:^(BOOL finished) {
+                                
+                                if (finished) {
+                                    [UIView animateWithDuration:0.5f
+                                                          delay:0.0f
+                                         usingSpringWithDamping:0.3f
+                                          initialSpringVelocity:0.1f
+                                                        options:UIViewAnimationOptionCurveEaseInOut
+                                                     animations:^{
+                                                         
+                                                         targetView.layer.transform = CATransform3DIdentity;
+                                                         
+                                                     } completion:^(BOOL finished) {
+                                                
+                                                         if (finished) {
+                                                             if (objects && objects.count) {
+                                                                 for (UIView *obj in objects) {
+                                                                     obj.alpha = 1.0f;
+                                                                 }
+                                                             }
+                                                         }
+                                                         
+                                                     }];
+                                }
+                                
+                            }];
+
+       } completion:nil];
+        
+    }
+}
+
 
 @end

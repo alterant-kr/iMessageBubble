@@ -160,10 +160,14 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
+                <outlet property="DownCurve" destination="r9S-DO-30Z" id="IqY-HT-Ygm"/>
+                <outlet property="Main" destination="ghH-2Z-hHd" id="gaE-mB-PjN"/>
+                <outlet property="UpCurve" destination="tpf-t4-sub" id="Ocz-K5-nhi"/>
                 <outlet property="chatMessageLabel" destination="IRK-48-D0p" id="ajg-jS-13b"/>
                 <outlet property="chatNameLabel" destination="xpr-bb-0S5" id="yfG-JX-bvb"/>
                 <outlet property="chatTimeLabel" destination="JWC-SJ-v7v" id="rlL-ez-Yev"/>
                 <outlet property="chatUserImage" destination="iv6-12-M80" id="9jC-Sp-pZs"/>
+                <outlet property="downCurve" destination="r9S-DO-30Z" id="SPC-MX-sBy"/>
             </connections>
             <point key="canvasLocation" x="-387" y="346.5"/>
         </tableViewCell>
