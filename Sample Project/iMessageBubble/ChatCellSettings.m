@@ -139,8 +139,8 @@ static ChatCellSettings *instance = nil;
         
         receiverBubbleTail = YES;
                 
-        senderChatMessageLabelWidth = 220.0f;
-        receiverChatMessageLabelWidth = 220.0f;
+        senderChatMessageLabelWidth = 190.0f;
+        receiverChatMessageLabelWidth = 165.0f;
         
         NSMutableParagraphStyle *paragraphStyle = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
         paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;

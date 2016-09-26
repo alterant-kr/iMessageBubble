@@ -102,24 +102,24 @@
     //[chatCellSettings setSenderBubbleTimeTextColor:[UIColor colorWithRed:(255.0f/255.0f) green:(255.0f/255.0f) blue:(255.0f/255.0f) alpha:1.0f]];
     //[chatCellSettings setReceiverBubbleTimeTextColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0f]];
     
-    [chatCellSettings setSenderBubbleColorHex:@"007AFF"];
-    [chatCellSettings setReceiverBubbleColorHex:@"DFDEE5"];
-    [chatCellSettings setSenderBubbleNameTextColorHex:@"FFFFFF"];
-    [chatCellSettings setReceiverBubbleNameTextColorHex:@"000000"];
-    [chatCellSettings setSenderBubbleMessageTextColorHex:@"FFFFFF"];
-    [chatCellSettings setReceiverBubbleMessageTextColorHex:@"000000"];
-    [chatCellSettings setSenderBubbleTimeTextColorHex:@"FFFFFF"];
-    [chatCellSettings setReceiverBubbleTimeTextColorHex:@"000000"];
-    
-    [chatCellSettings setSenderBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
-    [chatCellSettings setReceiverBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
-    [chatCellSettings setSenderBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
-    [chatCellSettings setReceiverBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
-    [chatCellSettings setSenderBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
-    [chatCellSettings setReceiverBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
-    
-    [chatCellSettings senderBubbleTailRequired:YES];
-    [chatCellSettings receiverBubbleTailRequired:YES];
+//    [chatCellSettings setSenderBubbleColorHex:@"007AFF"];
+//    [chatCellSettings setReceiverBubbleColorHex:@"DFDEE5"];
+//    [chatCellSettings setSenderBubbleNameTextColorHex:@"FFFFFF"];
+//    [chatCellSettings setReceiverBubbleNameTextColorHex:@"000000"];
+//    [chatCellSettings setSenderBubbleMessageTextColorHex:@"FFFFFF"];
+//    [chatCellSettings setReceiverBubbleMessageTextColorHex:@"000000"];
+//    [chatCellSettings setSenderBubbleTimeTextColorHex:@"FFFFFF"];
+//    [chatCellSettings setReceiverBubbleTimeTextColorHex:@"000000"];
+//    
+//    [chatCellSettings setSenderBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
+//    [chatCellSettings setReceiverBubbleFontWithSizeForName:[UIFont boldSystemFontOfSize:11]];
+//    [chatCellSettings setSenderBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
+//    [chatCellSettings setReceiverBubbleFontWithSizeForMessage:[UIFont systemFontOfSize:14]];
+//    [chatCellSettings setSenderBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
+//    [chatCellSettings setReceiverBubbleFontWithSizeForTime:[UIFont systemFontOfSize:11]];
+//    
+//    [chatCellSettings senderBubbleTailRequired:YES];
+//    [chatCellSettings receiverBubbleTailRequired:YES];
 
     // Set table view background color to R: 245, G: 237, B: 228
     [[self chatTable] setBackgroundColor:[UIColor colorWithRed:(245.0f/255.0f) green:(237.0f/255.0f) blue:(228.0f/255.0f) alpha:1.0f]];
@@ -303,6 +303,8 @@
     NSAttributedString *userMessage = nil;
     //Get the chal cell font settings. This is to correctly find out the height of each of the cell according to the text written in those cells which change according to their fonts and sizes.
     //If you want to keep the same font sizes for both sender and receiver cells then remove this code and manually enter the font name with size in Namesize, Messagesize and Timesize.
+    
+    CGFloat compHeight = 0.0f;
     if([message.messageType isEqualToString:@"self"])
     {
         fontArray = chatCellSettings.getSenderBubbleFontWithSize;
@@ -316,6 +318,7 @@
         [chatCellSettings setReceiverChatMessageLabelWidth:165.0f];
         bubbleWidth = [chatCellSettings getReceiverChatMessageLabelWidth];
         userMessage = [chatCellSettings replaceEmoticonTextToImageWithString:message.userMessage withAttributes:[chatCellSettings getReceiverAttributes]];
+        compHeight = 15.0f;
     }
     
     //Find the required cell height
@@ -341,7 +344,7 @@
                                      context:nil].size;
     
     
-    size.height = Messagesize.height + Namesize.height + Timesize.height + 48.0f;
+    size.height = Messagesize.height + Namesize.height + Timesize.height + compHeight;// + 48.0f;
     
     return size.height;
 }
