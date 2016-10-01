@@ -51,6 +51,7 @@
 /*!
  * More customizes by neoroman
  */
+- (BOOL)getShowSenderUserImage;
 - (CGFloat)getSenderChatMessageLabelWidth;
 - (void)setSenderChatMessageLabelWidth:(CGFloat)width;
 - (CGFloat)getReceiverChatMessageLabelWidth;
@@ -60,6 +61,11 @@
 - (NSDictionary *)getReceiverAttributes;
 - (void)setReceiverAttributes:(NSDictionary *)attributes;
 - (BOOL)getUseSendingBubbleEffect;
+- (CGFloat)getBubbleAndTextMargin;
+- (void)setBubbleAndTextBargin:(CGFloat)margin;
+- (BOOL)getBubbleTailFromTop;
+- (CGFloat)getBubbleCornerRadius;
+- (UIColor *)getTableViewBackgroundColor;
 
 #pragma mark - Read Emoticon Set
 /*!

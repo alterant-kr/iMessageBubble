@@ -99,7 +99,12 @@ CGFloat receiverChatMessageLabelWidth;
 NSDictionary *senderAttributes;
 NSDictionary *receiverAttributes;
 
+BOOL showSenderUserImage;
 BOOL useSendingBubbleEffect;
+CGFloat bubbleAndTextMargin;
+BOOL bubbleTailFromTop;
+CGFloat bubbleCornerRadius;
+UIColor *tableViewBackgroundColor;
 
 //Singleton instance
 static ChatCellSettings *instance = nil;
@@ -138,7 +143,9 @@ static ChatCellSettings *instance = nil;
         senderBubbleTail = YES;
         
         receiverBubbleTail = YES;
-                
+        
+        showSenderUserImage = YES;
+        
         senderChatMessageLabelWidth = 190.0f;
         receiverChatMessageLabelWidth = 165.0f;
         
@@ -152,7 +159,9 @@ static ChatCellSettings *instance = nil;
                              NSFontAttributeName: receiverBubbleMessageFontWithSize,
                              NSParagraphStyleAttributeName : paragraphStyle};
         
-        useSendingBubbleEffect = YES;
+        useSendingBubbleEffect = NO;
+        
+        tableViewBackgroundColor = [UIColor whiteColor];
     });
     
     return instance;
@@ -322,6 +331,10 @@ static ChatCellSettings *instance = nil;
 /*!
  * More customizes
  */
+- (BOOL)getShowSenderUserImage
+{
+    return showSenderUserImage;
+}
 - (CGFloat)getSenderChatMessageLabelWidth
 {
     return senderChatMessageLabelWidth;
@@ -357,6 +370,26 @@ static ChatCellSettings *instance = nil;
 - (BOOL)getUseSendingBubbleEffect
 {
     return useSendingBubbleEffect;
+}
+- (CGFloat)getBubbleAndTextMargin
+{
+    return bubbleAndTextMargin;
+}
+- (void)setBubbleAndTextBargin:(CGFloat)margin
+{
+    bubbleAndTextMargin = margin;
+}
+- (BOOL)getBubbleTailFromTop
+{
+    return bubbleTailFromTop;
+}
+- (CGFloat)getBubbleCornerRadius
+{
+    return bubbleCornerRadius;
+}
+- (UIColor *)getTableViewBackgroundColor
+{
+    return tableViewBackgroundColor;
 }
 
 #pragma mark - Read Emoticon Set

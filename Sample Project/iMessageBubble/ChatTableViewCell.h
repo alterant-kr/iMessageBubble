@@ -26,4 +26,44 @@ typedef NS_ENUM(NSUInteger, AuthorType) {
 @property (strong, nonatomic) UIView *DownCurve;
 @property (strong, nonatomic) UIView *CoverCurve;
 
+/*!
+ *  @brief Activity Indicator
+ */
+@property (strong, nonatomic) UIActivityIndicatorView *activity;
+
+/*!
+ *  @brief Fail Image
+ */
+@property (strong, nonatomic) UIButton *failButton;
+
+/*!
+ *  @brief ProgressBar
+ */
+//@property (strong, nonatomic) MBProgressBar *progressBar;
+
+/*!
+ *  @brief Unread Counter
+ */
+@property (strong, nonatomic) UILabel *chatUnreadCountLabel;
+
+/*!
+ * @brief Multi-functional Button like 'View All'
+ */
+@property (strong, nonatomic) UIButton *button;
+
+
+/*!
+ *  Image Download Progressing from Notification
+ *
+ *  @param aNoti NSNotification
+ */
+- (void)imageDownloadProgressing:(NSNotification *)aNoti;
+
+/*!
+ *  Image Upload Progressing from Notification
+ *
+ *  @param aNoti NSNotification
+ */
+- (void)imageUploadProgressing:(NSNotification *)aNoti;
+
 @end
